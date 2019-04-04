@@ -10,10 +10,15 @@ namespace CastleGrimtol.Project.Models
     public List<Item> Items { get; set; }
     public Dictionary<string, IRoom> Exits { get; set; }
 
+    public Challenge challenge { get; set; }
+
+    public bool isSolved { get; set; } = false;
+
     public Room(string name, string description)
     {
       Name = name;
       Description = description;
+      isSolved = false;
     }
   }
 }
