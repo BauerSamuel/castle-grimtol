@@ -141,10 +141,11 @@ namespace CastleGrimtol.Project
     {
       Setup();
       string intro = "You have just finished a coding boot-camp at Coise BodeWorks. You feel prepared for the world, but your next step is to get a job, and that makes you nervous. You notice an email in your inbox from E-corp. \"Only the largest tech company this side of the Mississippi!\" you say jokingly in your old instructor's voice. You open the email nervously, prepared for something big. Open? `Choice to open email. (yes/open opens the email immediately, no opens anyway, you feel drawn towards opening it, despite that you're telling yourself you don't want to). Email says: \"Congrats, you have been selected!We received your resume before and are pleased to invite you to our new DesertSide LAB for evaluation for a position. If you can get to Twin Falls, Idaho before Certain Date, you can take the CY - PHI EVOSPEED Train 1.5 hours directly to our facility.Our location is rather secret so we ask you don't inform others of your journey. We hope to see you soon.\"  Even a fool wouldn't pass up this offer, you pack your bags and prepare to leave the following morning.Sleeps comes to you, and you're alright with that. You'll leave early in the morning, you decide.SLEEP………";
+      Console.Clear();
       for (int i = 0; i < intro.Length; i++)
       {
         Console.Write(intro[i]);
-        Thread.Sleep(70);
+        Thread.Sleep(30);
       }
     }
 

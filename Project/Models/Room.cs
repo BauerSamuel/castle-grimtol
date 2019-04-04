@@ -19,6 +19,8 @@ namespace CastleGrimtol.Project.Models
       Name = name;
       Description = description;
       isSolved = false;
+      Exits = new Dictionary<string, IRoom>();
+      Items = new List<Item>();
     }
   }
 }
