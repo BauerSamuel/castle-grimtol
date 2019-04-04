@@ -26,6 +26,7 @@ namespace CastleGrimtol.Project
             Inventory();
             break;
           case "look":
+            Console.Clear();
             Look();
             break;
           case "quit":
@@ -134,6 +135,17 @@ namespace CastleGrimtol.Project
       room10.Exits.Add("north", parkingLot);
       parkingLot.Exits.Add("west", desert);
 
+
+      parkingLot.isSolved = true;
+
+
+      //Create items
+      Item marker1 = new Item("marker", "You slide your hand into the vase and grab the marker. It feels cold. It's old, and you have the feeling the marker could hypothetically have enough ink to solve around 6 whiteboard challenges.");
+      Item marker2 = new Item("marker", "You also find another old marker. Perfect timing since your marker just ran out of ink. --Marker added to inventory--");
+      Item cane1 = new Item("cane 1", "You reach up and tear the cane away from the skeleton's clutch. Phalangies and carpals go flying. --Cane added to inventory--");
+      Item cane2 = new Item("cane 2", "You look in the pipe and find a wooden cane, this one looks like it fits somewhere. Maybe it's not actually a cane. --Cane added to inventory--");
+
+
       CurrentRoom = room1;
     }
 
@@ -141,12 +153,15 @@ namespace CastleGrimtol.Project
     {
       Setup();
       string intro = "You have just finished a coding boot-camp at Coise BodeWorks. You feel prepared for the world, but your next step is to get a job, and that makes you nervous. You notice an email in your inbox from E-Corp. \"Only the largest tech company this side of the Mississippi!\" you say jokingly in your old instructor's voice. You open the email nervously,despite not wanting to, prepared for something big.  Email says: \"Congrats, you have been selected! We received your resume before and are pleased to invite you to our new DesertSide LAB for evaluation for a position. If you can get to Twin Falls, Idaho before May 15th, you can take the CY-PHI EVOSPEED Train 1.5 hours directly to our facility. Our location is rather secret so we ask you don't inform others of your journey. We hope to see you soon.\"  Even a fool wouldn't pass up this offer, you pack your bags and prepare to leave the following morning. Sleep comes to you, and you're alright with that. You'll leave early in the morning, you decide.\n";
+      string intro2 = "You awake early and start driving to Twin Falls, you arrive in a few hours. You find the amazing train station. It's quite ridiculous actually, such an expensive and technologically advanced project to only be used for the employees of E-corp. But it does need to travel through the harsh desert to the famous new DesertSide LAB. You show your ID to the ticket person, they radio something in but immediately stamp your ticket and send you on your way. You zone in and out of sleep, after the initial novelty wears off of traveling at 237mph. You're startled awake by the stewardess, who offers you water. You take it and drink, and your stomach feels as if it’s in free-fall. What's in that water? Immediate black-out………\n";
+      string intro3 = "You roll off the side of a short, uncomfortable table. The strange things you were dreaming about swirl out of focus and memory. Something about a potato… you can't remember. Whatever. WHERE ARE YOU?? Why were you sleeping? Why are you in an unfamiliar place?\n";
       Console.Clear();
       for (int i = 0; i < intro.Length; i++)
       {
         Console.Write(intro[i]);
         Thread.Sleep(15);
       }
+      Console.Write("press enter to go to sleep.");
       Console.ReadLine();
       string sleep = "SLEEP.......";
       for (int i = 0; i < sleep.Length; i++)
@@ -154,6 +169,28 @@ namespace CastleGrimtol.Project
         Console.Write(sleep[i]);
         Thread.Sleep(500);
       }
+      Console.Clear();
+      for (int i = 0; i < intro2.Length; i++)
+      {
+        Console.Write(intro2[i]);
+        Thread.Sleep(15);
+      }
+      string potato = "~~POTATO";
+      Console.ReadLine();
+      for (int i = 0; i < potato.Length; i++)
+      {
+        Console.Write(potato[i]);
+        Thread.Sleep(600);
+      }
+      Console.Clear();
+      for (int i = 0; i < intro3.Length; i++)
+      {
+        Console.Write(intro3[i]);
+        Thread.Sleep(20);
+      }
+      Console.ReadLine();
+      Help();
+      Console.ReadLine();
       Console.WriteLine("\n" + CurrentRoom.Description);
       GetUserInput();
     }
