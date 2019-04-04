@@ -21,9 +21,11 @@ namespace CastleGrimtol.Project
         {
           case "help":
             Help();
+            GetUserInput();
             break;
           case "inventory":
             Inventory();
+            GetUserInput();
             break;
           case "look":
             Console.Clear();
@@ -46,12 +48,15 @@ namespace CastleGrimtol.Project
         {
           case "go":
             Go(noun);
-            break;
-          case "help":
-            Help();
             GetUserInput();
             break;
-          case "quit":
+          case "take":
+            TakeItem(noun);
+            GetUserInput();
+            break;
+          default:
+            Console.WriteLine("Command not recognized. Try again.");
+            GetUserInput();
             break;
         }
       }
@@ -64,7 +69,7 @@ namespace CastleGrimtol.Project
         if (CurrentRoom.isSolved)
         {
           CurrentRoom = (Room)CurrentRoom.Exits[direction];
-          Look();
+          Console.WriteLine(CurrentRoom.Description);
         }
         else
         {
@@ -87,12 +92,24 @@ namespace CastleGrimtol.Project
 
     public void Inventory()
     {
-      Console.WriteLine("Shows inventory.");
+      Console.WriteLine("Items in inventory:");
+      foreach (Item i in CurrentPlayer.Inventory)
+      {
+        Console.WriteLine(i.Name);
+      }
     }
 
     public void Look()
     {
-      System.Console.WriteLine(CurrentRoom.Description);
+      Console.WriteLine(CurrentRoom.Description);
+      if (CurrentRoom.Items.Count > 0)
+      {
+        foreach (Item i in CurrentRoom.Items)
+        {
+          Console.WriteLine(i.Name);
+        }
+      }
+
     }
 
     public void Quit()
@@ -108,7 +125,7 @@ namespace CastleGrimtol.Project
     public void Setup()
     {
       //build rooms here.
-      Room room1 = new Room("Room 1", "It's dark. You set your feet on the ground and stand, somehow exactly as some white-LED lights turn on so now you can see. If you look around, you notice an industrial looking room. Lots of wires hanging from the high ceiling, large and small pipes running through the ceiling, a smell of metal and production, yet also ancient smells, like earth and damp leaves. You now notice that many wires hanging from the ceiling are actually vines--the room was certainly abandoned until now. You notice various rubble scattered about the room, this facility seems so old that it's falling apart. The northern wall has a bench against it, and the wall itself has markings that suggest some artwork was hanging on the wall before. Shattered glass on the floor below next to a small wooden picture-frame proves that. However, it's laying next to what appears to be a wooden cane. The eastern wall has a closed door in the middle (locked until challenge is solved). The western wall has a long table against it. The table has various rubble scattered on it: old papers, crumbled Styrofoam, dirt, dead leaves, and what appears to be an empty vase with a dry-erase marker in it. The south the wall is well-lit and mostly empty. Something on the wall looks familiar to you… is that a…. Whiteboard? Yes, definitely a whiteboard. With writing all over it. Just as you notice this, a crunchy, high-pitched sound tears through the silence. A strange robot voice, reminds you of both jar-jar binks and 343 guilty-spark from the Halo series. \"Hello. Welcome to E - Corp.You have been selected to interview with us. Please solve the whiteboard challenge on the south wall to continue!\"");
+      Room room1 = new Room("Room 1", "It's dark. You set your feet on the ground and stand, somehow exactly as some white-LED lights turn on so now you can see. If you look around, you notice an industrial looking room. Lots of wires hanging from the high ceiling, large and small pipes running through the ceiling, a smell of metal and production, yet also ancient smells, like earth and damp leaves. You now notice that many wires hanging from the ceiling are actually vines--the room was certainly abandoned until now. You notice various rubble scattered about the room, this facility seems so old that it's falling apart. The northern wall has a bench against it, and the wall itself has markings that suggest some artwork was hanging on the wall before. Shattered glass on the floor below next to a small wooden picture-frame proves that. The eastern wall has a closed door in the middle (locked until challenge is solved). The western wall has a long table against it. The table has various rubble scattered on it: old papers, crumbled Styrofoam, dirt, dead leaves, and what appears to be an empty vase with a dry-erase marker in it. The south the wall is well-lit and mostly empty. Something on the wall looks familiar to you… is that a…. Whiteboard? Yes, definitely a whiteboard. With writing all over it. Just as you notice this, a crunchy, high-pitched sound tears through the silence. A strange robot voice, reminds you of both jar-jar binks and 343 guilty-spark from the Halo series. \"Hello. Welcome to E - Corp.You have been selected to interview with us. Please solve the whiteboard challenge on the south wall to continue!\"");
       Room room2 = new Room("Room 2", "Musty and dim except for another well-lit whiteboard on the south wall. Various rubble scattered around the room, but nothing really noteworthy. Robot voice continues. \"Well done! You've found that when you solve problems, you advance. We are already impressed by you and want you to know you are one step closer to getting the job.\"");
       Room room3 = new Room("Room 3", "Vines and cobwebs cover the walls. Yet another well-lit whiteboard is on the south wall, slightly crooked, as it's probably been there for a long time. Patches of rugged looking plants spew from the ground in several places, but there's nothing else interesting in here. The robot pips in. \"You know there was a better solution to the last problem right? You're just displaying your skill in diverse solutions I suppose. No matter. We know you'll work harder and get the perfect solution this round.\"");
       Room room4 = new Room("Room 4", "This room is slightly different than the rest. The white-board has now moved over to the east wall, and the door is on the south wall. You do notice something out of the corner of your eye, at the north wall. The ceiling has a small crack, through it you see a skeleton with eyebrows. Creepy. Clutched in its hand, hanging against the north wall, is a wooden cane. The locked door is on the south wall. Robot seems a little annoyed by you now. \"So... we're talking back here and we can't believe you're authentic. Keep going of course, these solutions mean everything to us. But we're starting to think you are taking our innovative white-board questions to sell on the internet. We would like to remind you that our facility is 100% a farrady cage, and wireless internet just doesn't work or exist here. Be weary, interviewee.\"");
@@ -145,6 +162,12 @@ namespace CastleGrimtol.Project
       Item cane1 = new Item("cane 1", "You reach up and tear the cane away from the skeleton's clutch. Phalangies and carpals go flying. --Cane added to inventory--");
       Item cane2 = new Item("cane 2", "You look in the pipe and find a wooden cane, this one looks like it fits somewhere. Maybe it's not actually a cane. --Cane added to inventory--");
 
+      //Add items to rooms
+      room1.Items.Add(marker1);
+      room4.Items.Add(cane1);
+      room6.Items.Add(cane2);
+      room6.Items.Add(marker2);
+
 
       CurrentRoom = room1;
     }
@@ -152,6 +175,9 @@ namespace CastleGrimtol.Project
     public void StartGame()
     {
       Setup();
+      Console.WriteLine("Who are you?");
+      string pn = Console.ReadLine();
+      CurrentPlayer = new Player("pn");
       string intro = "You have just finished a coding boot-camp at Coise BodeWorks. You feel prepared for the world, but your next step is to get a job, and that makes you nervous. You notice an email in your inbox from E-Corp. \"Only the largest tech company this side of the Mississippi!\" you say jokingly in your old instructor's voice. You open the email nervously,despite not wanting to, prepared for something big.  Email says: \"Congrats, you have been selected! We received your resume before and are pleased to invite you to our new DesertSide LAB for evaluation for a position. If you can get to Twin Falls, Idaho before May 15th, you can take the CY-PHI EVOSPEED Train 1.5 hours directly to our facility. Our location is rather secret so we ask you don't inform others of your journey. We hope to see you soon.\"  Even a fool wouldn't pass up this offer, you pack your bags and prepare to leave the following morning. Sleep comes to you, and you're alright with that. You'll leave early in the morning, you decide.\n";
       string intro2 = "You awake early and start driving to Twin Falls, you arrive in a few hours. You find the amazing train station. It's quite ridiculous actually, such an expensive and technologically advanced project to only be used for the employees of E-corp. But it does need to travel through the harsh desert to the famous new DesertSide LAB. You show your ID to the ticket person, they radio something in but immediately stamp your ticket and send you on your way. You zone in and out of sleep, after the initial novelty wears off of traveling at 237mph. You're startled awake by the stewardess, who offers you water. You take it and drink, and your stomach feels as if it’s in free-fall. What's in that water? Immediate black-out………\n";
       string intro3 = "You roll off the side of a short, uncomfortable table. The strange things you were dreaming about swirl out of focus and memory. Something about a potato… you can't remember. Whatever. WHERE ARE YOU?? Why were you sleeping? Why are you in an unfamiliar place?\n";
@@ -159,7 +185,7 @@ namespace CastleGrimtol.Project
       for (int i = 0; i < intro.Length; i++)
       {
         Console.Write(intro[i]);
-        Thread.Sleep(15);
+        Thread.Sleep(2);
       }
       Console.Write("press enter to go to sleep.");
       Console.ReadLine();
@@ -167,26 +193,26 @@ namespace CastleGrimtol.Project
       for (int i = 0; i < sleep.Length; i++)
       {
         Console.Write(sleep[i]);
-        Thread.Sleep(500);
+        Thread.Sleep(600);
       }
       Console.Clear();
       for (int i = 0; i < intro2.Length; i++)
       {
         Console.Write(intro2[i]);
-        Thread.Sleep(15);
+        Thread.Sleep(2);
       }
       string potato = "~~POTATO";
       Console.ReadLine();
       for (int i = 0; i < potato.Length; i++)
       {
         Console.Write(potato[i]);
-        Thread.Sleep(600);
+        Thread.Sleep(500);
       }
       Console.Clear();
       for (int i = 0; i < intro3.Length; i++)
       {
         Console.Write(intro3[i]);
-        Thread.Sleep(20);
+        Thread.Sleep(2);
       }
       Console.ReadLine();
       Help();
@@ -197,12 +223,26 @@ namespace CastleGrimtol.Project
 
     public void TakeItem(string itemName)
     {
-      throw new System.NotImplementedException();
+      Item take = CurrentRoom.Items.Find(i => i.Name.ToLower() == itemName.ToLower());
+      if (take != null)
+      {
+        CurrentPlayer.Inventory.Add(take);
+        CurrentRoom.Items.Remove(take);
+        Console.WriteLine(take.Description);
+      }
+      else
+      {
+        Console.WriteLine("Can't take that.");
+      }
     }
 
     public void UseItem(string itemName)
     {
-      throw new System.NotImplementedException();
+      if (itemName == "marker" && !CurrentRoom.isSolved)
+      {
+        Console.WriteLine("You walk up to the whiteboard with marker in hand. It reads, scrawled in ancient fonts and inks: ");
+        CurrentRoom.AttemptChallenge();
+      }
     }
   }
 }

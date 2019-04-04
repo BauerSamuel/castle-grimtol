@@ -13,6 +13,11 @@ namespace CastleGrimtol.Project.Models
     public bool isSolved { get; set; } = false;
 
 
+
+    public void AttemptChallenge()
+    {
+      //Logic to attempt challenge. print challenge.Problem. If user inputs challenge.answer, then room.isSolved becomes true. Else, recurse to AttemptChallenge.
+    }
     public Room(string name, string description)
     {
       Name = name;
