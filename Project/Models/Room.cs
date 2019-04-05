@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CastleGrimtol.Project.Interfaces;
 
@@ -9,7 +10,7 @@ namespace CastleGrimtol.Project.Models
     public string Description { get; set; }
     public List<Item> Items { get; set; }
     public Dictionary<string, IRoom> Exits { get; set; }
-    public Challenge challenge { get; set; }
+    public Challenge Challenge { get; set; }
     public bool isSolved { get; set; } = false;
 
 
@@ -17,6 +18,19 @@ namespace CastleGrimtol.Project.Models
     public void AttemptChallenge()
     {
       //Logic to attempt challenge. print challenge.Problem. If user inputs challenge.answer, then room.isSolved becomes true. Else, recurse to AttemptChallenge.
+      Console.WriteLine(Challenge.Problem);
+      Console.WriteLine("Fill in the blank to solve: ");
+      string sol = Console.ReadLine();
+      if (sol.ToLower() == Challenge.Solution.ToLower())
+      {
+        Console.WriteLine("Robot speaks.\"Well done!\" --Door to next room is now unlocked--");
+        isSolved = true;
+      }
+      else
+      {
+        Console.WriteLine("Robot speaks. \"FAIL!\"");
+        AttemptChallenge();
+      }
     }
     public Room(string name, string description)
     {

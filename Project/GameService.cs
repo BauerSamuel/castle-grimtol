@@ -15,6 +15,7 @@ namespace CastleGrimtol.Project
     {
       string input = Console.ReadLine();
       string[] inputs = input.Split(" ");
+      //If 1 word command;
       if (inputs.Length < 2)
       {
         switch (input)
@@ -40,7 +41,7 @@ namespace CastleGrimtol.Project
         }
         GetUserInput();
       }
-      else
+      else if (inputs.Length == 2) //If two-word command
       {
         string action = inputs[0].ToLower();
         string noun = inputs[1].ToLower();
@@ -54,11 +55,19 @@ namespace CastleGrimtol.Project
             TakeItem(noun);
             GetUserInput();
             break;
+          case "use":
+            UseItem(noun);
+            break;
           default:
             Console.WriteLine("Command not recognized. Try again.");
             GetUserInput();
             break;
         }
+      }
+      else
+      {
+        Console.WriteLine("Enter something with one or two words. Enter 'help' for more information about acceptable commands.");
+        GetUserInput();
       }
     }
 
@@ -69,6 +78,7 @@ namespace CastleGrimtol.Project
         if (CurrentRoom.isSolved)
         {
           CurrentRoom = (Room)CurrentRoom.Exits[direction];
+          Console.Clear();
           Console.WriteLine(CurrentRoom.Description);
         }
         else
@@ -87,7 +97,10 @@ namespace CastleGrimtol.Project
     public void Help()
     {
       //Display all options for user to choose.
-      Console.WriteLine("Shows options for player.");
+      Console.WriteLine(@"go + _____: goes to direction (north, south, east, west)
+      
+                          look: gives description of room and items.
+      ");
     }
 
     public void Inventory()
@@ -159,14 +172,57 @@ namespace CastleGrimtol.Project
       //Create items
       Item marker1 = new Item("marker", "You slide your hand into the vase and grab the marker. It feels cold. It's old, and you have the feeling the marker could hypothetically have enough ink to solve around 6 whiteboard challenges.");
       Item marker2 = new Item("marker", "You also find another old marker. Perfect timing since your marker just ran out of ink. --Marker added to inventory--");
-      Item cane1 = new Item("cane 1", "You reach up and tear the cane away from the skeleton's clutch. Phalangies and carpals go flying. --Cane added to inventory--");
-      Item cane2 = new Item("cane 2", "You look in the pipe and find a wooden cane, this one looks like it fits somewhere. Maybe it's not actually a cane. --Cane added to inventory--");
+      Item cane = new Item("cane", "You reach up and tear the cane away from the skeleton's clutch. Phalangies and carpals go flying. --Cane added to inventory--");
+      Item stick = new Item("stick", "You look in the pipe and find a long and solid stick, this one looks like it fits somewhere. Maybe it's not just a stick, but serves another purpose --Cane added to inventory--");
 
       //Add items to rooms
       room1.Items.Add(marker1);
-      room4.Items.Add(cane1);
-      room6.Items.Add(cane2);
+      room4.Items.Add(cane);
+      room6.Items.Add(stick);
       room6.Items.Add(marker2);
+
+      //Create white-board challenges
+      Challenge challenge1 = new Challenge(@"
+Write a function that takes in two numbers and returns their sum (fill in the blank).
+
+function addEm(num1, num2){
+    return num1 + _______
+}
+      ", "num2");
+      Challenge challenge2 = new Challenge(@"
+Write a function that takes in a number and returns true if it's divisible by 100 (fill in the blank).
+
+function isDivBy100(num){
+    return num ___ 100 == 0
+}
+      ", "%");
+      Challenge challenge3 = new Challenge(@"
+Write a function that capitalizes the first letter of a string and then returns that new string (fill in the blank).
+
+function capital(str){
+  strArr = str.split('')
+  strArr[0] = strArr[0].toUpperCase()
+  capStr = strArr.________
+  return capStr
+}
+      ", "join('')");
+      Challenge challenge4 = new Challenge(@"", "");
+      Challenge challenge5 = new Challenge(@"", "");
+      Challenge challenge6 = new Challenge(@"", "");
+      Challenge challenge7 = new Challenge(@"", "");
+      Challenge challenge8 = new Challenge(@"", "");
+      Challenge challenge9 = new Challenge(@"", "");
+      Challenge challenge10 = new Challenge(@"...Whiteboard is empty... What will I write?", "potato");
+
+
+
+
+
+      //Add challenges to their respective room.
+      room1.Challenge = challenge1;
+      room2.Challenge = challenge2;
+      room3.Challenge = challenge3;
+
 
 
       CurrentRoom = room1;
@@ -238,10 +294,34 @@ namespace CastleGrimtol.Project
 
     public void UseItem(string itemName)
     {
-      if (itemName == "marker" && !CurrentRoom.isSolved)
+      Item itemToUse = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == itemName.ToLower());
+      if (itemToUse != null)
       {
-        Console.WriteLine("You walk up to the whiteboard with marker in hand. It reads, scrawled in ancient fonts and inks: ");
-        CurrentRoom.AttemptChallenge();
+
+        if (itemName.ToLower() == "marker")
+        {
+          if (!CurrentRoom.isSolved)
+          {
+            Console.Clear();
+            Console.WriteLine("You walk up to the whiteboard with marker in hand. It reads, scrawled in ancient fonts and inks: ");
+            CurrentRoom.AttemptChallenge();
+          }
+          else
+          {
+            Console.WriteLine("Room is already solved. I need to move on to the next room.");
+          }
+        }
+        if (itemName.ToLower() == "cane")
+        {
+          if (CurrentRoom.Name == "room6")
+          {
+            Console.WriteLine("You find that the cane fits perfectly into the upside-down table. Now it's missing one less leg.");
+          }
+        }
+      }
+      else
+      {
+        Console.WriteLine("Don't have that item in inventory.");
       }
     }
   }
