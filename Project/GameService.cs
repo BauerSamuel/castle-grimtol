@@ -227,14 +227,37 @@ function isDivBy100(num){
 Write a function that capitalizes the first letter of a string and then returns that new string (fill in the blank).
 
 function capital(str){
-  strArr = str.split('')
-  strArr[0] = strArr[0].toUpperCase()
-  capStr = strArr.________
-  return capStr
+    strArr = str.split('')
+    strArr[0] = strArr[0].toUpperCase()
+    capStr = strArr.___('')
+    return capStr
 }
-      ", "join('')");
-      Challenge challenge4 = new Challenge(@"", "");
-      Challenge challenge5 = new Challenge(@"", "");
+      ", "join");
+      Challenge challenge4 = new Challenge(@"
+Write a function that takes in an array of integers and returns the sum of their squares(fill in the blank).
+
+function sumOfCubes(nums) {
+	  var sum = 0;
+	  for (var i in nums) {
+		sum __ nums[i]*nums[i];
+	}
+	return r;
+}
+      ", "+=");
+      Challenge challenge5 = new Challenge(@"
+Write a function that prints the first n numbers in the fibonacci sequence(fill in the blank).
+
+function fibonacci(n){
+    temp = 0
+    next = 1
+    console.log(temp + ' ')
+    for(let i = 0; i < n - 1; i++){
+      console.log(next + ' ')
+      next += temp;
+      temp = next-temp;
+    }
+}
+    ", "");
       Challenge challenge6 = new Challenge(@"", "");
       Challenge challenge7 = new Challenge(@"", "");
       Challenge challenge8 = new Challenge(@"", "");
