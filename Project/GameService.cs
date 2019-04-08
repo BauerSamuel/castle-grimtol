@@ -271,8 +271,37 @@ function fibonacci(n){
     }
 }
     ", "temp");
-      Challenge challenge8 = new Challenge(@"", "");
-      Challenge challenge9 = new Challenge(@"", "");
+      Challenge challenge8 = new Challenge(@"
+Write a function that returns the file extension when given a string thats a file name (fill in the blank).
+
+function fileExt(str){
+
+    let arr = str.split('.')
+    if(arr.length > 1){
+      return arr[_________]
+    }else{
+      return 'Not a valid input.'
+    }
+}
+      ", "arr.length-1");
+      Challenge challenge9 = new Challenge(@"
+Write a function that prints numbers 1 through 100, but if the number is divisible by 5, it prints 'fizz' instead of the actual number. And if the number is divisible by 3 then it will print 'buzz' instead of the actual number. And finally if divisible by both, then it will print 'fizzbuzz' in place of the number.
+
+function fizzBuzz(){
+    for(int i = 0; i<101; i++){
+      if(i % 5 == 0){
+        console.log('fizz')
+      }
+      if(i % 3 == 0){
+        console.log('buzz')
+        continue;
+      }else{
+        console.log(i + ' ')
+      }
+
+    }
+}
+      ", "");
       Challenge challenge10 = new Challenge(@"...Whiteboard is empty... What will I write?", "potato");
 
 
