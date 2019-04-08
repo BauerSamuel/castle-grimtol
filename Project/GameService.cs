@@ -154,7 +154,7 @@ namespace CastleGrimtol.Project
     public void Quit()
     {
       Console.WriteLine("Quits out of game.");
-      playing = false;
+      // playing = false;
     }
 
     public void Reset()
@@ -200,7 +200,7 @@ namespace CastleGrimtol.Project
       Item marker1 = new Item("marker", "You slide your hand into the vase and grab the marker. It feels cold. It's old, and you have the feeling the marker could hypothetically have enough ink to solve around 6 whiteboard challenges. --Marker added to inventory--");
       Item marker2 = new Item("marker", "You also find another old marker. Perfect timing since your marker just ran out of ink. --Marker added to inventory--");
       Item cane = new Item("cane", "You reach up and tear the cane away from the skeleton's clutch. Phalangies and carpals go flying. --Cane added to inventory--");
-      Item stick = new Item("stick", "You look in the pipe and find a long and solid stick, this one looks like it fits somewhere. Maybe it's not just a stick, but serves another purpose --Cane added to inventory--");
+      Item stick = new Item("stick", "You look in the pipe and find a long and solid stick, this one looks like it fits somewhere. Maybe it's not just a stick, but serves another purpose --Stick added to inventory--");
 
       //Add items to rooms
       room1.Items.Add(marker1);
@@ -217,13 +217,26 @@ function addEm(num1, num2){
 }
       ", "num2");
       Challenge challenge2 = new Challenge(@"
+Write a function that takes two strings and returns one string formatted like 'lastName, firstName'(fill in the blank).
+function concatName(firstName, lastName) {
+    return '________ + ', ' + firstName';
+}
+      ", "lastName");
+      Challenge challenge3 = new Challenge(@"
 Write a function that takes in a number and returns true if it's divisible by 100 (fill in the blank).
 
 function isDivBy100(num){
     return num ___ 100 == 0
 }
       ", "%");
-      Challenge challenge3 = new Challenge(@"
+      Challenge challenge4 = new Challenge(@"
+Write a function that returns the remainder of num1 divded by num2(fill in the blank).
+
+function remainder(num1, num2){
+    return num1 _____________ ;
+}
+      ", "% num2");
+      Challenge challenge5 = new Challenge(@"
 Write a function that capitalizes the first letter of a string and then returns that new string (fill in the blank).
 
 function capital(str){
@@ -233,8 +246,8 @@ function capital(str){
     return capStr
 }
       ", "join");
-      Challenge challenge4 = new Challenge(@"
-Write a function that takes in an array of integers and returns the sum of their squares(fill in the blank).
+      Challenge challenge6 = new Challenge(@"
+Write a function that takes in an array of integers and returns the sum of all of their squares(fill in the blank).
 
 function sumOfCubes(nums) {
 	  var sum = 0;
@@ -244,7 +257,7 @@ function sumOfCubes(nums) {
 	return r;
 }
       ", "+=");
-      Challenge challenge5 = new Challenge(@"
+      Challenge challenge7 = new Challenge(@"
 Write a function that prints the first n numbers in the fibonacci sequence(fill in the blank).
 
 function fibonacci(n){
@@ -253,13 +266,11 @@ function fibonacci(n){
     console.log(temp + ' ')
     for(let i = 0; i < n - 1; i++){
       console.log(next + ' ')
-      next += temp;
+      next += ____;
       temp = next-temp;
     }
 }
-    ", "");
-      Challenge challenge6 = new Challenge(@"", "");
-      Challenge challenge7 = new Challenge(@"", "");
+    ", "temp");
       Challenge challenge8 = new Challenge(@"", "");
       Challenge challenge9 = new Challenge(@"", "");
       Challenge challenge10 = new Challenge(@"...Whiteboard is empty... What will I write?", "potato");
@@ -269,6 +280,13 @@ function fibonacci(n){
       room1.Challenge = challenge1;
       room2.Challenge = challenge2;
       room3.Challenge = challenge3;
+      room4.Challenge = challenge4;
+      room5.Challenge = challenge5;
+      room6.Challenge = challenge6;
+      room7.Challenge = challenge7;
+      room8.Challenge = challenge8;
+      room9.Challenge = challenge9;
+      room10.Challenge = challenge10;
 
       Table RandomTable = new Table();
 
@@ -277,55 +295,53 @@ function fibonacci(n){
 
     public void StartGame()
     {
-      while (playing)
+      Setup();
+      Console.WriteLine("Who are you?");
+      string pn = Console.ReadLine();
+      CurrentPlayer = new Player("pn");
+      string intro = "You have just finished a coding boot-camp at Coise BodeWorks. You feel prepared for the world, but your next step is to get a job, and that makes you nervous. You notice an email in your inbox from E-Corp. \"Only the largest tech company this side of the Mississippi!\" you say jokingly in your old instructor's voice. You open the email nervously,despite not wanting to, prepared for something big.  Email says: \"Congrats, you have been selected! We received your resume before and are pleased to invite you to our new DesertSide LAB for evaluation for a position. If you can get to Twin Falls, Idaho before May 15th, you can take the CY-PHI EVOSPEED Train 1.5 hours directly to our facility. Our location is rather secret so we ask you don't inform others of your journey. We hope to see you soon.\"  Even a fool wouldn't pass up this offer, you pack your bags and prepare to leave the following morning. Sleep comes to you, and you're alright with that. You'll leave early in the morning, you decide.\n";
+      string intro2 = "You awake early and start driving to Twin Falls, you arrive in a few hours. You find the amazing train station. It's quite ridiculous actually, such an expensive and technologically advanced project to only be used for the employees of E-corp. But it does need to travel through the harsh desert to the famous new DesertSide LAB. You show your ID to the ticket person, they radio something in but immediately stamp your ticket and send you on your way. You zone in and out of sleep, after the initial novelty wears off of traveling at 237mph. You're startled awake by the stewardess, who offers you water. You take it and drink, and your stomach feels as if it’s in free-fall. What's in that water? Immediate black-out………\n";
+      string intro3 = "You roll off the side of a short, uncomfortable table. The strange things you were dreaming about swirl out of focus and memory. Something about a potato… you can't remember. Whatever. WHERE ARE YOU?? Why were you sleeping? Why are you in an unfamiliar place?\n";
+      Console.Clear();
+      for (int i = 0; i < intro.Length; i++)
       {
-        Setup();
-        Console.WriteLine("Who are you?");
-        string pn = Console.ReadLine();
-        CurrentPlayer = new Player("pn");
-        string intro = "You have just finished a coding boot-camp at Coise BodeWorks. You feel prepared for the world, but your next step is to get a job, and that makes you nervous. You notice an email in your inbox from E-Corp. \"Only the largest tech company this side of the Mississippi!\" you say jokingly in your old instructor's voice. You open the email nervously,despite not wanting to, prepared for something big.  Email says: \"Congrats, you have been selected! We received your resume before and are pleased to invite you to our new DesertSide LAB for evaluation for a position. If you can get to Twin Falls, Idaho before May 15th, you can take the CY-PHI EVOSPEED Train 1.5 hours directly to our facility. Our location is rather secret so we ask you don't inform others of your journey. We hope to see you soon.\"  Even a fool wouldn't pass up this offer, you pack your bags and prepare to leave the following morning. Sleep comes to you, and you're alright with that. You'll leave early in the morning, you decide.\n";
-        string intro2 = "You awake early and start driving to Twin Falls, you arrive in a few hours. You find the amazing train station. It's quite ridiculous actually, such an expensive and technologically advanced project to only be used for the employees of E-corp. But it does need to travel through the harsh desert to the famous new DesertSide LAB. You show your ID to the ticket person, they radio something in but immediately stamp your ticket and send you on your way. You zone in and out of sleep, after the initial novelty wears off of traveling at 237mph. You're startled awake by the stewardess, who offers you water. You take it and drink, and your stomach feels as if it’s in free-fall. What's in that water? Immediate black-out………\n";
-        string intro3 = "You roll off the side of a short, uncomfortable table. The strange things you were dreaming about swirl out of focus and memory. Something about a potato… you can't remember. Whatever. WHERE ARE YOU?? Why were you sleeping? Why are you in an unfamiliar place?\n";
-        Console.Clear();
-        for (int i = 0; i < intro.Length; i++)
-        {
-          Console.Write(intro[i]);
-          Thread.Sleep(2);
-        }
-        Console.Write("press enter to go to sleep.");
-        Console.ReadLine();
-        string sleep = "SLEEP.......";
-        for (int i = 0; i < sleep.Length; i++)
-        {
-          Console.Write(sleep[i]);
-          Thread.Sleep(600);
-        }
-        Console.Clear();
-        for (int i = 0; i < intro2.Length; i++)
-        {
-          Console.Write(intro2[i]);
-          Thread.Sleep(2);
-        }
-        string potato = "~~POTATO";
-        Console.ReadLine();
-        for (int i = 0; i < potato.Length; i++)
-        {
-          Console.Write(potato[i]);
-          Thread.Sleep(500);
-        }
-        Console.Clear();
-        for (int i = 0; i < intro3.Length; i++)
-        {
-          Console.Write(intro3[i]);
-          Thread.Sleep(2);
-        }
-        Console.ReadLine();
-        Help();
-        Console.ReadLine();
-        Console.WriteLine("\n" + CurrentRoom.Description);
-        GetUserInput();
+        Console.Write(intro[i]);
+        Thread.Sleep(2);
       }
-      Console.WriteLine("You failed the interview process. Good luck in your job-search.");
+      Console.Write("press enter to go to sleep.");
+      Console.ReadLine();
+      string sleep = "SLEEP.......";
+      for (int i = 0; i < sleep.Length; i++)
+      {
+        Console.Write(sleep[i]);
+        Thread.Sleep(600);
+      }
+      Console.Clear();
+      for (int i = 0; i < intro2.Length; i++)
+      {
+        Console.Write(intro2[i]);
+        Thread.Sleep(2);
+      }
+      string potato = "~~POTATO";
+      Console.ReadLine();
+      for (int i = 0; i < potato.Length; i++)
+      {
+        Console.Write(potato[i]);
+        Thread.Sleep(500);
+      }
+      Console.Clear();
+      for (int i = 0; i < intro3.Length; i++)
+      {
+        Console.Write(intro3[i]);
+        Thread.Sleep(2);
+      }
+      Console.ReadLine();
+      Help();
+      Console.ReadLine();
+      Console.WriteLine("\n" + CurrentRoom.Description);
+      GetUserInput();
+      // }
+      // Console.WriteLine("You failed the interview process. Good luck in your job-search.");
     }
 
     public void TakeItem(string itemName)
@@ -345,7 +361,7 @@ function fibonacci(n){
 
     public void UseItem(string itemName)
     {
-      Item itemToUse = CurrentPlayer.Inventory.Find(i => i.Name.ToLower() == itemName.ToLower());
+      Item itemToUse = CurrentPlayer.Inventory.Find(i => i.Name == itemName.ToLower());
       if (itemToUse != null)
       {
 
@@ -356,10 +372,12 @@ function fibonacci(n){
             Console.Clear();
             Console.WriteLine("You walk up to the whiteboard with marker in hand. It reads, scrawled in ancient fonts and inks: ");
             CurrentRoom.AttemptChallenge();
+            GetUserInput();
           }
           else
           {
             Console.WriteLine("Room is already solved. I need to go to the next room.");
+            GetUserInput();
           }
         }
         if (itemName.ToLower() == "cane")
@@ -367,8 +385,8 @@ function fibonacci(n){
           if (CurrentRoom.Name == "room6")
           {
             RandomTable.addALeg();
-            Item theStick = CurrentPlayer.Inventory.Find(i => i.Name == "stick");
-            CurrentPlayer.Inventory.Remove(theStick);
+            Item theCane = CurrentPlayer.Inventory.Find(i => i.Name == "cane");
+            CurrentPlayer.Inventory.Remove(theCane);
             if (RandomTable.flipped)
             {
               Console.WriteLine("The cane wiggles perfectly into the last socket under the table. The table has 4 legs now, you flip the table over and notice it's just high enough to escape the factory. Go west to escape.");
@@ -387,6 +405,7 @@ function fibonacci(n){
       }
       else if (itemName.ToLower() == "stick")
       {
+        Console.WriteLine("This is room: " + CurrentRoom.Name);
         if (CurrentRoom.Name == "room6")
         {
           RandomTable.addALeg();
