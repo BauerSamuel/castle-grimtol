@@ -74,42 +74,81 @@ namespace CastleGrimtol.Project
 
     public void Go(string direction)
     {
-      if (CurrentRoom.Exits.ContainsKey(direction))
+      if (CurrentRoom is Room)
       {
-        if (CurrentRoom.Name == "Room 6")
+
+        if (CurrentRoom.Exits.ContainsKey(direction))
         {
-          if (CurrentRoom.Table.flipped && direction == "west")
+          if (CurrentRoom.Name == "Room 6")
+          {
+            if (CurrentRoom.Table.flipped && direction == "west")
+            {
+              CurrentRoom = (Room)CurrentRoom.Exits[direction];
+              Console.Clear();
+              Console.WriteLine(CurrentRoom.Description);
+              return;
+            }
+            else if (!CurrentRoom.Table.flipped && direction == "west")
+            {
+              Console.Clear();
+              Console.WriteLine("There's nothing here but a table.");
+              return;
+            }
+          }
+          if (CurrentRoom.isSolved)
           {
             CurrentRoom = (Room)CurrentRoom.Exits[direction];
             Console.Clear();
+            if (CurrentRoom.Name == "desert")
+            {
+              EndGame(CurrentRoom);
+              return;
+            }
             Console.WriteLine(CurrentRoom.Description);
             return;
           }
-          else if (!CurrentRoom.Table.flipped && direction == "west")
+          else
           {
-            Console.Clear();
-            Console.WriteLine("There's nothing here but a table.");
+            Console.WriteLine("Door won't budge. Use marker to complete white board challenge and advance to the next room.");
             return;
           }
         }
-        if (CurrentRoom.isSolved)
-        {
-          CurrentRoom = (Room)CurrentRoom.Exits[direction];
-          Console.Clear();
-          Console.WriteLine(CurrentRoom.Description);
-          return;
-        }
         else
         {
-          Console.WriteLine("Door won't budge. Use marker to complete white board challenge and advance to the next room.");
+          Console.WriteLine($"Can't move {direction}, choose another direction.");
           return;
         }
       }
       else
       {
-        Console.WriteLine($"Can't move {direction}, choose another direction.");
-        return;
+
       }
+    }
+
+    private void EndGame(Room final)
+    {
+      Console.Clear();
+      Console.WriteLine(final.Description);
+
+      Console.WriteLine(@"
+           ^^                   @@@@@@@@@
+      ^^       ^^            @@@@@@@@@@@@@@@
+                           @@@@@@@@@@@@@@@@@@              ^^
+                          @@@@@@@@@@@@@@@@@@@@
+~~~~ ~~ ~~~~~ ~~~~~~~~ ~~ &&&&&&&&&&&&&&&&&&&& ~~~~~~~ ~~~~~~~~~~~ ~~~
+~         ~~   ~  ~       ~~~~~~~~~~~~~~~~~~~~ ~       ~~     ~~ ~
+  ~      ~~      ~~ ~~ ~~  ~~~~~~~~~~~~~ ~~~~  ~     ~~~    ~ ~~~  ~ ~~ 
+  ~  ~~     ~         ~      ~~~~~~  ~~ ~~~       ~~ ~ ~~  ~~ ~ 
+~  ~       ~ ~      ~           ~~ ~~~~~~  ~      ~~  ~             ~~
+      ~             ~        ~      ~      ~~   ~             ~
+  ______________ ______________     ___________ _______  ________   
+  \__    ___/   |   \_   _____/     \_   _____/ \      \ \______ \  
+    |    | /    ~    \    __)_       |    __)_  /   |   \ |    |  \ 
+    |    | \    Y    /        \      |        \/    |    \|    `   \
+    |____|  \___|_  /_______  /     /_______  /\____|__  /_______  /
+                  \/        \/              \/         \/        \/  
+      ");
+      playing = false;
     }
 
     public void Help()
