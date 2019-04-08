@@ -252,7 +252,7 @@ Write a function that takes in an array of integers and returns the sum of all o
 function sumOfCubes(nums) {
 	  var sum = 0;
 	  for (var i in nums) {
-		sum __ nums[i]*nums[i];
+		    sum __ nums[i]*nums[i];
 	}
 	return r;
 }
@@ -265,9 +265,9 @@ function fibonacci(n){
     next = 1
     console.log(temp + ' ')
     for(let i = 0; i < n - 1; i++){
-      console.log(next + ' ')
-      next += ____;
-      temp = next-temp;
+        console.log(next + ' ')
+        next += ____;
+        temp = next-temp;
     }
 }
     ", "temp");
@@ -278,9 +278,9 @@ function fileExt(str){
 
     let arr = str.split('.')
     if(arr.length > 1){
-      return arr[_________]
+        return arr[_________]
     }else{
-      return 'Not a valid input.'
+        return 'Not a valid input.'
     }
 }
       ", "arr.length-1");
@@ -290,14 +290,14 @@ Write a function that prints numbers 1 through 100, but if the number is divisib
 function fizzBuzz(){
     for(int i = 0; i < 101; i++){
       if((i % 5 == 0) ____ (i % 3 == 0)){
-        console.log('fizzbuzz')
+          console.log('fizzbuzz')
       }
       else-if(i % 5 == 0){
-        console.log('fizz')
+          console.log('fizz')
       }else-if(i % 3){
-        console.log('buzz')
+          console.log('buzz')
       }else{
-        console.log(i)
+          console.log(i)
       }
 
     }
