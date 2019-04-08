@@ -285,23 +285,24 @@ function fileExt(str){
 }
       ", "arr.length-1");
       Challenge challenge9 = new Challenge(@"
-Write a function that prints numbers 1 through 100, but if the number is divisible by 5, it prints 'fizz' instead of the actual number. And if the number is divisible by 3 then it will print 'buzz' instead of the actual number. And finally if divisible by both, then it will print 'fizzbuzz' in place of the number.
+Write a function that prints numbers 1 through 100, but if the number is divisible by 5, it prints 'fizz' instead of the actual number. And if the number is divisible by 3 then it will print 'buzz' instead of the actual number. And finally if divisible by both, then it will print 'fizzbuzz' in place of the number(fill in the blank).
 
 function fizzBuzz(){
-    for(int i = 0; i<101; i++){
-      if(i % 5 == 0){
-        console.log('fizz')
+    for(int i = 0; i < 101; i++){
+      if((i % 5 == 0) ____ (i % 3 == 0)){
+        console.log('fizzbuzz')
       }
-      if(i % 3 == 0){
+      else-if(i % 5 == 0){
+        console.log('fizz')
+      }else-if(i % 3){
         console.log('buzz')
-        continue;
       }else{
-        console.log(i + ' ')
+        console.log(i)
       }
 
     }
 }
-      ", "");
+      ", "&&");
       Challenge challenge10 = new Challenge(@"...Whiteboard is empty... What will I write?", "potato");
 
 
