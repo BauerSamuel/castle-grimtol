@@ -10,7 +10,6 @@ namespace CastleGrimtol.Project
   {
     public Room CurrentRoom { get; set; }
     public Player CurrentPlayer { get; set; }
-    public Table RandomTable { get; set; }
 
     public bool playing { get; set; } = true;
 
@@ -42,7 +41,6 @@ namespace CastleGrimtol.Project
             Reset();
             break;
         }
-        GetUserInput();
       }
       else if (inputs.Length == 2) //If two-word command
       {
@@ -52,40 +50,46 @@ namespace CastleGrimtol.Project
         {
           case "go":
             Go(noun);
-            GetUserInput();
+
             break;
           case "take":
             TakeItem(noun);
-            GetUserInput();
+
             break;
           case "use":
             UseItem(noun);
             break;
           default:
             Console.WriteLine("Command not recognized. Try again.");
-            GetUserInput();
+
             break;
         }
       }
       else
       {
         Console.WriteLine("Enter something with one or two words. Enter 'help' for more information about acceptable commands.");
-        GetUserInput();
       }
+      GetUserInput();
     }
 
     public void Go(string direction)
     {
       if (CurrentRoom.Exits.ContainsKey(direction))
       {
-        if (CurrentRoom.Name == "room6")
+        if (CurrentRoom.Name == "Room 6")
         {
-          if (RandomTable.flipped && direction == "west")
+          if (CurrentRoom.Table.flipped && direction == "west")
           {
             CurrentRoom = (Room)CurrentRoom.Exits[direction];
             Console.Clear();
             Console.WriteLine(CurrentRoom.Description);
-            GetUserInput();
+            return;
+          }
+          else if (!CurrentRoom.Table.flipped && direction == "west")
+          {
+            Console.Clear();
+            Console.WriteLine("There's nothing here but a table.");
+            return;
           }
         }
         if (CurrentRoom.isSolved)
@@ -93,19 +97,19 @@ namespace CastleGrimtol.Project
           CurrentRoom = (Room)CurrentRoom.Exits[direction];
           Console.Clear();
           Console.WriteLine(CurrentRoom.Description);
-          GetUserInput();
+          return;
         }
         else
         {
           Console.WriteLine("Door won't budge. Use marker to complete white board challenge and advance to the next room.");
-          GetUserInput();
+          return;
         }
       }
       else
       {
         Console.WriteLine($"Can't move {direction}, choose another direction.");
+        return;
       }
-      GetUserInput();
     }
 
     public void Help()
@@ -134,7 +138,6 @@ namespace CastleGrimtol.Project
       {
         Console.WriteLine(i.Name);
       }
-      GetUserInput();
     }
 
     public void Look()
@@ -148,7 +151,6 @@ namespace CastleGrimtol.Project
           Console.WriteLine(i.Name);
         }
       }
-      GetUserInput();
     }
 
     public void Quit()
@@ -207,6 +209,10 @@ namespace CastleGrimtol.Project
       room4.Items.Add(cane);
       room6.Items.Add(stick);
       room6.Items.Add(marker2);
+
+      Table table = new Table();
+
+      room6.Table = table;
 
       //Create white-board challenges
       Challenge challenge1 = new Challenge(@"
@@ -412,12 +418,13 @@ function fizzBuzz(){
         }
         if (itemName.ToLower() == "cane")
         {
-          if (CurrentRoom.Name == "room6")
+          if (CurrentRoom.Name == "Room 6")
           {
-            RandomTable.addALeg();
+            Console.WriteLine("This is room: " + CurrentRoom.Name);
+            CurrentRoom.Table.addALeg();
             Item theCane = CurrentPlayer.Inventory.Find(i => i.Name == "cane");
             CurrentPlayer.Inventory.Remove(theCane);
-            if (RandomTable.flipped)
+            if (CurrentRoom.Table.flipped)
             {
               Console.WriteLine("The cane wiggles perfectly into the last socket under the table. The table has 4 legs now, you flip the table over and notice it's just high enough to escape the factory. Go west to escape.");
             }
@@ -432,27 +439,26 @@ function fizzBuzz(){
             Console.WriteLine("No use for the cane in this room. Maybe in Room 6 it could be more useful.");
           }
         }
-      }
-      else if (itemName.ToLower() == "stick")
-      {
-        Console.WriteLine("This is room: " + CurrentRoom.Name);
-        if (CurrentRoom.Name == "room6")
+        else if (itemName.ToLower() == "stick")
         {
-          RandomTable.addALeg();
-          Item theStick = CurrentPlayer.Inventory.Find(i => i.Name == "stick");
-          CurrentPlayer.Inventory.Remove(theStick);
-          if (RandomTable.flipped)
+          if (CurrentRoom.Name == "Room 6")
           {
-            Console.WriteLine("The stick fits perfectly into the last empty socket under the table. The table has 4 legs now, you flip the table over and notice it's just high enough to escape the factory. Go west to escape.");
+            CurrentRoom.Table.addALeg();
+            Item theStick = CurrentPlayer.Inventory.Find(i => i.Name == "stick");
+            CurrentPlayer.Inventory.Remove(theStick);
+            if (CurrentRoom.Table.flipped)
+            {
+              Console.WriteLine("The stick fits perfectly into the last empty socket under the table. The table has 4 legs now, you flip the table over and notice it's just high enough to escape the factory. Go west to escape.");
+            }
+            else
+            {
+              Console.WriteLine("You find the stick fits perfectly into the underside of the table. Maybe try using another item to solve the 'puzzle of the table'.");
+            }
           }
           else
           {
-            Console.WriteLine("You find the stick fits perfectly into the underside of the table. Maybe try using another item to solve the 'puzzle of the table'.");
+            Console.WriteLine("Can't use the stick here, try it in Room 6.");
           }
-        }
-        else
-        {
-          Console.WriteLine("Can't use the stick here, try it in Room 6.");
         }
       }
       else
