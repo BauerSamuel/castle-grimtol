@@ -99,8 +99,9 @@ namespace CastleGrimtol.Project
           {
             CurrentRoom = (Room)CurrentRoom.Exits[direction];
             Console.Clear();
-            if (CurrentRoom.Name == "desert")
+            if (CurrentRoom.Name == "Desert")
             {
+              Console.WriteLine("Made it here, to: " + CurrentRoom.Name);
               EndGame(CurrentRoom);
               return;
             }
@@ -149,6 +150,7 @@ namespace CastleGrimtol.Project
                   \/        \/              \/         \/        \/  
       ");
       playing = false;
+      Quit();
     }
 
     public void Help()
@@ -194,8 +196,8 @@ namespace CastleGrimtol.Project
 
     public void Quit()
     {
-      Console.WriteLine("Quits out of game.");
       // playing = false;
+      Environment.Exit(0);
     }
 
     public void Reset()
@@ -459,7 +461,6 @@ function fizzBuzz(){
         {
           if (CurrentRoom.Name == "Room 6")
           {
-            Console.WriteLine("This is room: " + CurrentRoom.Name);
             CurrentRoom.Table.addALeg();
             Item theCane = CurrentPlayer.Inventory.Find(i => i.Name == "cane");
             CurrentPlayer.Inventory.Remove(theCane);
