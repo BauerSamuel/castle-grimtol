@@ -74,58 +74,59 @@ namespace CastleGrimtol.Project
 
     public void Go(string direction)
     {
-      if (CurrentRoom is Room)
+      if (CurrentRoom.Exits.ContainsKey(direction))
       {
-
-        if (CurrentRoom.Exits.ContainsKey(direction))
+        if (CurrentRoom.Name == "Room 6")
         {
-          if (CurrentRoom.Name == "Room 6")
-          {
-            if (CurrentRoom.Table.flipped && direction == "west")
-            {
-              CurrentRoom = (Room)CurrentRoom.Exits[direction];
-              Console.Clear();
-              Console.WriteLine(CurrentRoom.Description);
-              return;
-            }
-            else if (!CurrentRoom.Table.flipped && direction == "west")
-            {
-              Console.Clear();
-              Console.WriteLine("There's nothing here but a table.");
-              return;
-            }
-          }
-          if (CurrentRoom.isSolved)
+          if (CurrentRoom.Table.flipped && direction == "west")
           {
             CurrentRoom = (Room)CurrentRoom.Exits[direction];
             Console.Clear();
-            if (CurrentRoom.Name == "Desert")
-            {
-              Console.WriteLine("Made it here, to: " + CurrentRoom.Name);
-              EndGame(CurrentRoom);
-              return;
-            }
             Console.WriteLine(CurrentRoom.Description);
             return;
           }
-          else
+          else if (!CurrentRoom.Table.flipped && direction == "west")
           {
-            Console.WriteLine("Door won't budge. Use marker to complete white board challenge and advance to the next room.");
+            Console.Clear();
+            Console.WriteLine("There's nothing here but a table.");
             return;
           }
         }
+        if (CurrentRoom.isSolved)
+        {
+          CurrentRoom = (Room)CurrentRoom.Exits[direction];
+          Console.Clear();
+          if (CurrentRoom.Name == "Desert")
+          {
+            Console.WriteLine("Made it here, to: " + CurrentRoom.Name);
+            EndGame(CurrentRoom);
+            return;
+          }
+          Console.WriteLine(CurrentRoom.Description);
+          if (CurrentRoom.Name == "Room 6")
+          {
+            Item deadMarker = CurrentPlayer.Inventory.Find(i => i.Name == "marker");
+            if (deadMarker != null)
+            {
+              CurrentPlayer.Inventory.Remove(deadMarker);
+              Console.WriteLine("**----Your marker has run out of ink and is no longer in your inventory. You can inexplicably feel there is a marker nearby though, maybe you should just LOOK.----**");
+            }
+            else { return; }
+          }
+          return;
+        }
         else
         {
-          Console.WriteLine($"Can't move {direction}, choose another direction.");
+          Console.WriteLine("Door won't budge. Use marker to complete white board challenge and advance to the next room.");
           return;
         }
       }
       else
       {
-
+        Console.WriteLine($"Can't move {direction}, choose another direction.");
+        return;
       }
     }
-
     private void EndGame(Room final)
     {
       Console.Clear();
@@ -167,22 +168,35 @@ namespace CastleGrimtol.Project
 
       quit          **give up and end the game
 
-      reset         **restart the game from the beginning
+      reset         **restart the game from the beginning(doesn't actually work. So just quit and start again)
       ");
 
     }
 
     public void Inventory()
     {
-      Console.WriteLine("Items in inventory:");
-      foreach (Item i in CurrentPlayer.Inventory)
+      if (CurrentPlayer.Inventory.Count > 0)
       {
-        Console.WriteLine(i.Name);
+
+        Console.WriteLine("\nItems in inventory:");
+        foreach (Item i in CurrentPlayer.Inventory)
+        {
+          Console.WriteLine(i.Name);
+        }
+      }
+      else
+      {
+        Console.WriteLine("\nNo items in inventory.");
       }
     }
 
     public void Look()
     {
+      if (CurrentRoom.Name == "Room 10" && CurrentRoom.isSolved)
+      {
+        Console.WriteLine("\nThe room is filling with popcorn fast. I need to go north and get out of here now.");
+        return;
+      }
       Console.WriteLine(CurrentRoom.Description);
       if (CurrentRoom.Items.Count > 0)
       {
@@ -191,6 +205,10 @@ namespace CastleGrimtol.Project
         {
           Console.WriteLine(i.Name);
         }
+      }
+      else
+      {
+        Console.WriteLine("\nNo items here.");
       }
     }
 
@@ -208,18 +226,18 @@ namespace CastleGrimtol.Project
     public void Setup()
     {
       //build rooms here.
-      Room room1 = new Room("Room 1", "It's dark. You set your feet on the ground and stand, somehow exactly as some white-LED lights turn on so now you can see. If you look around, you notice an industrial looking room. Lots of wires hanging from the high ceiling, large and small pipes running through the ceiling, a smell of metal and production, yet also ancient smells, like earth and damp leaves. You now notice that many wires hanging from the ceiling are actually vines--the room was certainly abandoned until now. You notice various rubble scattered about the room, this facility seems so old that it's falling apart. The northern wall has a bench against it, and the wall itself has markings that suggest some artwork was hanging on the wall before. Shattered glass on the floor below next to a small wooden picture-frame proves that. The eastern wall has a closed door in the middle (locked until challenge is solved). The western wall has a long table against it. The table has various rubble scattered on it: old papers, crumbled Styrofoam, dirt, dead leaves, and what appears to be an empty vase with a dry-erase marker in it. The south the wall is well-lit and mostly empty. Something on the wall looks familiar to you… is that a…. Whiteboard? Yes, definitely a whiteboard. With writing all over it. Just as you notice this, a crunchy, high-pitched sound tears through the silence. A strange robot voice, reminds you of both jar-jar binks and 343 guilty-spark from the Halo series. \"Hello. Welcome to E - Corp.You have been selected to interview with us. Please solve the whiteboard challenge on the south wall to continue!\"");
-      Room room2 = new Room("Room 2", "Musty and dim except for another well-lit whiteboard on the south wall. Various rubble scattered around the room, but nothing really noteworthy. Robot voice continues. \"Well done! You've found that when you solve problems, you advance. We are already impressed by you and want you to know you are one step closer to getting the job.\"");
-      Room room3 = new Room("Room 3", "Vines and cobwebs cover the walls. Yet another well-lit whiteboard is on the south wall, slightly crooked, as it's probably been there for a long time. Patches of rugged looking plants spew from the ground in several places, but there's nothing else interesting in here. The robot pips in. \"You know there was a better solution to the last problem right? You're just displaying your skill in diverse solutions I suppose. No matter. We know you'll work harder and get the perfect solution this round.\"");
-      Room room4 = new Room("Room 4", "This room is slightly different than the rest. The white-board has now moved over to the east wall, and the door is on the south wall. You do notice something out of the corner of your eye, at the north wall. The ceiling has a small crack, through it you see a skeleton with eyebrows. Creepy. Clutched in its hand, hanging against the north wall, is a wooden cane. The locked door is on the south wall. Robot seems a little annoyed by you now. \"So... we're talking back here and we can't believe you're authentic. Keep going of course, these solutions mean everything to us. But we're starting to think you are taking our innovative white-board questions to sell on the internet. We would like to remind you that our facility is 100% a farrady cage, and wireless internet just doesn't work or exist here. Be weary, interviewee.\"");
-      Room room5 = new Room("Room 5", "In this room, the west wall is plain, with even more rubble and debris than the last though. East wall has a whiteboard. Other walls are blank. Robot is silent so far.");
-      Room room6 = new Room("Room 6", "Now this room is interesting, it has a collapsed roof on the west wall, so lots of debris there. Against that wall, there's an upside down table with only two legs. East wall has whiteboard and more debris, and a pipe laying across the ground with some things sticking out of the end. . South wall has locked door.");
-      Room room7 = new Room("Room 7", "Whiteboard on east wall. \"You are excellent. We are impressed and offer a surprise for you if you complete the next 4 challenges. Good luck, brave interviewee.\"");
-      Room room8 = new Room("Room 8", "\"In case you didn't notice, I am a robot. I have been here for thousands of years, and I've never felt better. I'm so youthful, in fact, that I prepared quite the surprise for you in room 10. I heard you like popcorn so I had our engineers pop 300 kilograms of the stuff in anticipation of you finishing the interview. We decided it was mostly possible that you are NOT trying to 'Slugworth' us. See? I'm hip, I know the pop-culture of the world. I read Charlie and the Chocolate factory.\" This room is looking seriously decrepid. Rubble everywhere. Thousands of years of whiteboard challenges must have predecessed you. You feel a pulse in the air, as if thousands of computer scientists everywhere are chearing for you, hoping and waiting excitedly to finish these lasts whiteboard challenges. The hairs on your arm stand. Your pulse beats in your eardrums, it's deafening. You must carry on.");
-      Room room9 = new Room("Room 9", "The rubble and plants swirl around your feet as you walk into room 9. The air is dense, musty, yet full of life. You glance at the door on the west wall. Behind it, the final challenge. The popcorn. You feel the chear of the world's computer scientists swelling, chearing you on in spirit. Like your in the final round of some bizarre game show that no one has ever really won before. The robot is silent.");
-      Room room10 = new Room("Room 10", "\"Let me tell you something, no one has ever solved this last challenge. It's the result of thousands of years of trial and error, error and trial. The greatest minds in the world created the greatest robots in the world, which then created a final super computer. That very super computer is me, and I am the result. I am the test. I am the origin of all white board problems. And alone you stand, with marker and brain, to solve my final test. We're actually adversaries, you know? All along we knew about you. Those who fortold of you have been long dead, everyone but me. Now here we are. Your test is on the whiteboard. Write your solution there, if you're worthy.\" As you approach the whiteboard, you hear deep thunder, somewhere in the depths of the massive and ancient facility. Trembling in the earth. The north wall is a strange color, different than other walls you've seen. You notice this white board is blank. The robot said 'Write you solution here?' What could he mean? The solution to what? What is it? You raise your shaking arm. Your shoulder is sore from all the whiteboard challenges you've defeated. The marker feels heavy. You prepare to write your final answer.");
-      Room parkingLot = new Room("Parking Lot", "You jump down on to the mushy ground. It's now night. The smell of death immidiately swells in your nostrils. A large decrepid field, maybe it was once a parking lot in a different time, is almost completely enclosed by the walls of the facility you've just escaped from. To your horror, robot peices and bones protrude from the ground everywhere you look. Possibly the remnants of an ancient battle. The half-moon provides you some light. You notice an opening in the west side of the parking lot.");
-      Room desert = new Room("Desert", "You walk through the parking lot turnstile and into the open desert of southern Idaho. Sand swirls around you. You breath in air and some grit. You feel free, despite the wastes in front of you. As you march into the desert, you muse over the fact that you're still unemployed.");
+      Room room1 = new Room("Room 1", "It's dark. You set your feet on the ground and stand, somehow exactly as some white-LED lights turn on so now you can see. If you look around, you notice an industrial looking room. Lots of wires hanging from the high ceiling, large and small pipes running through the ceiling, a smell of metal and production, yet also ancient smells, like earth and damp leaves. You now notice that many wires hanging from the ceiling are actually vines--the room was certainly abandoned until now. You notice various rubble scattered throughout the room, this facility seems so old that it's falling apart. The northern wall has a bench against it, and the wall itself has markings that suggest some artwork was hanging on the wall before. Shattered glass on the floor below next to a small wooden picture-frame proves that. The eastern wall has a closed door in the middle (locked until challenge is solved). The western wall has a long table against it. The table has junk scattered on it: old papers, crumbled Styrofoam, dirt, dead leaves, and what appears to be an empty vase with a dry-erase MARKER in it. The south the wall is well-lit and mostly empty. Something on the wall looks familiar to you… is that a…. Whiteboard? Yes, definitely a whiteboard. With writing all over it. Just as you notice this, a crunchy, high-pitched sound tears through the silence. A strange robot voice, reminds you of both jar-jar binks and 343 guilty-spark from the Halo series. \"Hello. Welcome to E - Corp.You have been selected to interview with us. Please solve the whiteboard challenge to continue! You need to first take the marker, then use it. That will be a common theme during this interview.\"");
+      Room room2 = new Room("Room 2", "Musty and dim except for another well-lit whiteboard. Various rubble scattered around the room, but nothing really noteworthy. Robot voice continues. \"Well done! You've found that when you solve problems, you advance. We are already impressed by you and want you to know you are one step closer to getting the job.\"");
+      Room room3 = new Room("Room 3", "Vines and cobwebs cover the walls. Yet another well-lit whiteboard is here, slightly crooked, as it's probably been there for a long time. Patches of rugged looking plants spew from the ground in several places, but there's nothing else interesting in here. The robot pips in. \"You know there was a better solution to the last problem right? You're just displaying your skill in diverse solutions I suppose. No matter. We know you'll work harder and get the perfect solution this round.\"");
+      Room room4 = new Room("Room 4", "This room is slightly different than the rest. The door is now on the south wall. You do notice something out of the corner of your eye. The ceiling has a small crack, through it you see a skeleton with eyebrows. Creepy. Clutched in its hand, hanging against the wall, is a wooden CANE. The door is on the south wall. Robot seems a little annoyed by you now. \"So... we're talking back here and we can't believe you're authentic. Keep going of course, these solutions mean everything to us. But we're starting to think you are taking our innovative white-board questions to sell on the internet. We would like to remind you that our facility is 100% a farrady cage, and wireless internet just doesn't work or exist here. Be weary, interviewee.\"");
+      Room room5 = new Room("Room 5", "In this room, the west wall is plain, with even more rubble and debris than the last though. A fifth whiteboard can be seen here. Door is to the south. Other walls are blank. Robot is silent so far.");
+      Room room6 = new Room("Room 6", "Now this room is interesting, it has a collapsed roof on the west wall, so lots of debris there. Against that wall, there's an upside down table with only two legs. Another whiteboard and more debris, and a pipe laying across the ground with some things sticking out of the end. Door is to the south wall.");
+      Room room7 = new Room("Room 7", "Room 7, the robot starts up again with its annoying voice \"You are excellent. We are impressed and offer a surprise for you if you complete the next 4 challenges. Good luck, brave interviewee.\" Door is to the west here, weird.");
+      Room room8 = new Room("Room 8", "\"In case you didn't notice, I am a robot. I have been here for thousands of years, and I've never felt better. I'm so youthful, in fact, that I prepared quite the surprise for you in room 10. I heard you like popcorn so I had our engineers pop 300 kilograms of the stuff in anticipation of you finishing the interview. We decided it was mostly possible that you are NOT trying to 'Slugworth' us. See? I'm hip, I know the pop-culture of the world. I read Charlie and the Chocolate factory.\" This room is looking seriously decrepid. Door to the west. Yet another whiteboard. Rubble everywhere.Thousands of years of whiteboard challenges must have predecessed you. You feel a pulse in the air, as if thousands of computer scientists everywhere are chearing for you, hoping and waiting excitedly for you to finish these lasts whiteboard challenges. The hairs on your arm stand. Your pulse beats in your eardrums, it's deafening. You must carry on.");
+      Room room9 = new Room("Room 9", "The rubble and plants swirl around your feet as you walk into room 9. The air is dense, musty, yet vvibrating and full of life. You glance at the next white board, and the door on the west wall. Behind it, the final challenge. The popcorn. You feel the cheer of the world's computer scientists swelling, I suppose they're with you in spirit. Like you're in the final round of some bizarre game show that no one has ever really won before. The robot is silent.");
+      Room room10 = new Room("Room 10", "You step in to the gargantuan final room. It's really a mess of cables, metal rods, pipes, plants, dust. \"Let me tell you something, no one has ever solved this last challenge. It's the result of thousands of years of trial and error, error and trial. The greatest minds in the world created the greatest robots in the world, which then created a final super computer. That super computer is me. I am the result. I am the test. I am the origin of all white board problems. And alone you stand, with marker and brain, to solve my final test. We're actually adversaries, you know? All along we knew about you. Those who fortold of you have been long dead, everyone but me. Now here we are. Your test is on the whiteboard. Write your solution there, if you're worthy.\" As you approach the whiteboard, you hear deep thunder, somewhere in the depths of the massive and ancient facility. Trembling in the earth. The north wall is a strange color, different than other walls you've seen. You notice this white board is blank. The robot said 'Write you solution here?' What could he mean? The solution to what? What is it? You raise your shaking arm. Your shoulder is sore from all the whiteboard challenges you've defeated. The marker feels heavy. You prepare to write your final answer.");
+      Room parkingLot = new Room("Parking Lot", "You jump down on to the mushy ground. You hear the robot screaming after you from deep within the structure you've just jumped from. Its shrill voice piercing into the night. The smell of death immidiately swells in your nostrils. A large decrepid field, maybe it was once a parking lot in a different time, is almost completely enclosed by the walls of the facility you've just escaped from. To your horror, robot peices and bones protrude from the ground everywhere you look. Possibly the remnants of an ancient battle. The half-moon provides you some light. You notice an opening in the west side of the parking lot.");
+      Room desert = new Room("Desert", "You walk through the parking lot turnstile and into the open desert of southern Idaho. Sand swirls around you. You breathe in air and some grit. You feel free, despite the wastes in front of you. As you march into the desert, you muse over the fact that you're still unemployed.");
 
       //Add exits to rooms.
       room1.Exits.Add("east", room2);
@@ -296,12 +314,12 @@ function capital(str){
       Challenge challenge6 = new Challenge(@"
 Write a function that takes in an array of integers and returns the sum of all of their squares(fill in the blank).
 
-function sumOfCubes(nums) {
+function sumOfSquares(nums) {
 	  var sum = 0;
-	  for (var i in nums) {
-		    sum __ nums[i]*nums[i];
-	}
-	return r;
+	  for (int i = 0; i < nums.length; i++) {
+		  sum __ nums[i]*nums[i];
+	  }
+	return sum;
 }
       ", "+=");
       Challenge challenge7 = new Challenge(@"
@@ -449,6 +467,10 @@ function fizzBuzz(){
             Console.Clear();
             Console.WriteLine("You walk up to the whiteboard with marker in hand. It reads, scrawled in ancient fonts and inks: ");
             CurrentRoom.AttemptChallenge();
+            if (CurrentRoom.Name == "Room 10")
+            {
+              Console.WriteLine("The robot shrieks in delight. Is it delight though, you wonder? Before you can even contemplate, explosive drums in the deep. Firecrackers, as loud as mortar strikes rip into the ancient room. The foundation rumbles and quakes. Then you smell it. Popcorn. An immense flood of popcorn rushes into the room, from places unknown, from the deep. Comparable to the great flood itself, the robot cackles as the popcorn level in the room rises. In the great shaking though, the north wall folds over, revealing a small opening for you. Go north now or die from popcorn-enduced asphixiation.");
+            }
             GetUserInput();
           }
           else

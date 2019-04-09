@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using CastleGrimtol.Project.Interfaces;
 
 namespace CastleGrimtol.Project.Models
@@ -24,6 +25,12 @@ namespace CastleGrimtol.Project.Models
       string sol = Console.ReadLine();
       if (sol.ToLower() == Challenge.Solution.ToLower())
       {
+        if (Name == "Room 10")
+        {
+          Console.WriteLine("The floodlights turn on, giving the room an eerie green tint. \"no. NOOO. NOOOO!!!!!!! How could you solve my final test!? You fowl, awful, terrible interviewee. Oh you get the job alright. I didn't lie to you when I said I'd give you popcorn. HERE YOU GO!\"");
+          Thread.Sleep(8000);
+          return;
+        }
         Random rnd = new Random();
         int rando = rnd.Next(1, 5);
         if (rando == 1)
