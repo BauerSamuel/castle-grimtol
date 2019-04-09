@@ -220,7 +220,8 @@ namespace CastleGrimtol.Project
 
     public void Reset()
     {
-      StartGame();
+      Console.WriteLine("Reset is a valid input but it acts weird in this program so just enter \"dotnet run\" immediatly after this line");
+      Quit();
     }
 
     public void Setup()
