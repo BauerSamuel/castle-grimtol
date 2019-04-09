@@ -471,6 +471,7 @@ function fizzBuzz(){
             if (CurrentRoom.Name == "Room 10")
             {
               Console.WriteLine("The robot shrieks in delight. Is it delight though, you wonder? Before you can even contemplate, explosive drums in the deep. Firecrackers, as loud as mortar strikes rip into the ancient room. The foundation rumbles and quakes. Then you smell it. Popcorn. An immense flood of popcorn rushes into the room, from places unknown, from the deep. Comparable to the great flood itself, the robot cackles as the popcorn level in the room rises. In the great shaking though, the north wall folds over, revealing a small opening for you. Go north now or die from popcorn-enduced asphixiation.");
+              CurrentRoom.isSolved = true;
             }
             GetUserInput();
           }
