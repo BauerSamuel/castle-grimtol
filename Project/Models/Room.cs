@@ -23,7 +23,7 @@ namespace CastleGrimtol.Project.Models
       Console.WriteLine(Challenge.Problem);
       Console.WriteLine("Fill in the blank to solve: ");
       string sol = Console.ReadLine();
-      if (sol.ToLower() == Challenge.Solution.ToLower())
+      if (sol == Challenge.Solution || String.Join("", sol.Split(" ")) == String.Join("", Challenge.Solution.Split(" ")))
       {
         if (Name == "Room 10")
         {

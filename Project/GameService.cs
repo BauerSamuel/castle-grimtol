@@ -512,7 +512,7 @@ function fizzBuzz(){
             CurrentPlayer.Inventory.Remove(theStick);
             if (CurrentRoom.Table.flipped)
             {
-              Console.WriteLine("The stick fits perfectly into the last empty socket under the table. The table has 4 legs now, you flip the table over and notice it's just high enough to escape the factory. Go west to escape.");
+              Console.WriteLine("The stick fits perfectly into the last empty socket under the table. The table has 4 legs now, you flip the table over and notice it's just high enough to escape out of the torn/collapsed ceiling. Go west to escape.");
             }
             else
             {
